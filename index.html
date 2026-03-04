@@ -1,26 +1,60 @@
-<script>
-    let kamus = [];
-    
-    // Mengambil data (Pastikan nama file data.json tanpa titik)
-    fetch('data.json') 
-        .then(response => response.json())
-        .then(data => kamus = data)
-        .catch(err => console.error("Gagal memuat data:", err));
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penerjemah Latin</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; background-color: #f4f4f4; }
+        .box { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 350px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        #hasilDisplay { margin-top: 20px; font-weight: bold; color: #2c3e50; min-height: 40px; }
+    </style>
+</head>
+<body>
 
-    function cari() {
-        let input = document.getElementById('inputLatin').value.toLowerCase().trim();
-        let hasilDisplay = document.getElementById('hasil');
+    <div class="box">
+        <h2>Penerjemah Latin</h2>
+        <input type="text" id="inputLatin" oninput="cari()" placeholder="Ketik kata Latin atau Indonesia...">
+        <div id="hasilDisplay">Hasil terjemahan akan muncul di sini</div>
+    </div>
+
+    <script>
+        let kamus = [];
         
-        // Mencari di kolom 'latin' ATAU 'indonesia'
-        let ketemu = kamus.find(item => 
-            item.latin.toLowerCase() === input || 
-            item.indonesia.toLowerCase() === input
-        );
+        // Mengambil data dari file data.json
+        fetch('data.json')
+            .then(response => response.json())
+            .then(data => {
+                kamus = data;
+                console.log("Data berhasil dimuat");
+            })
+            .catch(err => {
+                console.error("Gagal memuat data:", err);
+                document.getElementById('hasilDisplay').innerText = "Gagal memuat data kamus.";
+            });
 
-        if (ketemu) {
-            hasilDisplay.innerHTML = <strong>${ketemu.indonesia}</strong> (${ketemu.part_of_speech});
-        } else {
-            hasilDisplay.innerHTML = "Kata tidak ditemukan";
+        function cari() {
+            let input = document.getElementById('inputLatin').value.toLowerCase().trim();
+            let hasilDisplay = document.getElementById('hasilDisplay');
+            
+            if (input === "") {
+                hasilDisplay.innerText = "Hasil terjemahan akan muncul di sini";
+                return;
+            }
+
+            // Mencari di kolom 'latin' ATAU 'indonesia'
+            let ketemu = kamus.find(item => 
+                item.latin.toLowerCase() === input || 
+                item.indonesia.toLowerCase() === input
+            );
+
+            if (ketemu) {
+                hasilDisplay.innerHTML = <span style="color: #27ae60;">${ketemu.latin}</span> = ${ketemu.indonesia}<br><small style="color: #7f8c8d;">(${ketemu.part_of_speech})</small>;
+            } else {
+                hasilDisplay.innerHTML = "<span style="color: #e74c3c;">Kata tidak ditemukan</span>";
+            }
         }
-    }
-</script>
+    </script>
+</body>
+</html>
