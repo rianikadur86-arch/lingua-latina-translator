@@ -1,36 +1,26 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Penerjemah Bahasa Latin</title>
-    <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px; background: #f4f4f4; }
-        .box { background: white; padding: 20px; border-radius: 10px; display: inline-block; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        input { padding: 10px; width: 250px; border-radius: 5px; border: 1px solid #ddd; }
-        #hasil { margin-top: 20px; font-weight: bold; color: #2c3e50; }
-    </style>
-</head>
-<body>
-    <div class="box">
-        <h2>Penerjemah Latin</h2>
-        <input type="text" id="inputLatin" placeholder="Ketik kata Latin..." oninput="cari()">
-        <div id="hasil">Hasil terjemahan akan muncul di sini</div>
-    </div>
+<script>
+    let kamus = [];
+    
+    // Mengambil data (Pastikan nama file data.json tanpa titik)
+    fetch('data.json') 
+        .then(response => response.json())
+        .then(data => kamus = data)
+        .catch(err => console.error("Gagal memuat data:", err));
 
-    <script>
-        let kamus = [];
-        // Mengambil data dari file data.json yang sudah Anda buat
-        fetch('data.json')
-            .then(response => response.json())
-            .then(data => kamus = data);
+    function cari() {
+        let input = document.getElementById('inputLatin').value.toLowerCase().trim();
+        let hasilDisplay = document.getElementById('hasil');
+        
+        // Mencari di kolom 'latin' ATAU 'indonesia'
+        let ketemu = kamus.find(item => 
+            item.latin.toLowerCase() === input || 
+            item.indonesia.toLowerCase() === input
+        );
 
-        function cari() {
-            let input = document.getElementById('inputLatin').value.toLowerCase();
-            let hasil = kamus.find(item => item.latin.toLowerCase() === input);
-            document.getElementById('hasil').innerHTML = hasil ? 
-                Indonesia: ${hasil.indonesia} (${hasil.part_of_speech}) : 
-                "Kata tidak ditemukan";
+        if (ketemu) {
+            hasilDisplay.innerHTML = <strong>${ketemu.indonesia}</strong> (${ketemu.part_of_speech});
+        } else {
+            hasilDisplay.innerHTML = "Kata tidak ditemukan";
         }
-    </script>
-</body>
-</html>
+    }
+</script>
