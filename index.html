@@ -2,58 +2,19 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Penerjemah Latin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lingua Latina Translator</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; background-color: #f4f4f4; }
-        .box { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 350px; text-align: center; }
-        input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
-        #hasilDisplay { margin-top: 20px; font-weight: bold; color: #2c3e50; }
+        body { font-family: sans-serif; text-align: center; padding: 50px; background-color: #f4f4f9; }
+        .container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: inline-block; }
+        input { padding: 10px; width: 250px; border: 1px solid #ddd; border-radius: 5px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        #hasilDisplay { margin-top: 20px; font-size: 1.2em; color: #333; }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h2>Penerjemah Latin</h2>
-        <input type="text" id="inputLatin" oninput="cari()" placeholder="Ketik kata Latin atau Indonesia...">
-        <div id="hasilDisplay">Memuat data...</div>
-    </div>
 
-    <script>
-        let kamus = [];
-        
-        // Memastikan file terpanggil dengan benar tanpa titik di akhir nama
-        fetch('data.json')
-            .then(response => response.json())
-            .then(data => {
-                kamus = data;
-                document.getElementById('hasilDisplay').innerText = "Siap mencari!";
-                console.log("Data berhasil dimuat");
-            })
-            .catch(err => {
-                document.getElementById('hasilDisplay').innerText = "Gagal memuat data.json";
-                console.error(err);
-            });
-
-        function cari() {
-            let input = document.getElementById('inputLatin').value.toLowerCase().trim();
-            let display = document.getElementById('hasilDisplay');
-            
-            if (input === "") {
-                display.innerText = "Hasil terjemahan akan muncul di sini";
-                return;
-            }
-
-            // Mencari kata yang cocok di latin atau indonesia
-            let ketemu = kamus.find(item => 
-                (item.latin && item.latin.toLowerCase() === input) || 
-                (item.indonesia && item.indonesia.toLowerCase() === input)
-            );
-
-            if (ketemu) {
-                display.innerHTML = <span style="color:green">${ketemu.latin}</span> = ${ketemu.indonesia};
-            } else {
-                display.innerText = "Kata tidak ditemukan...";
-            }
-        }
-    </script>
-</body>
-</html>
+    <div class="container">
+        <h1>Kamus Bahasa Latin</h1>
+        <p>Cari terjemahan dari 500+ kosakata</
