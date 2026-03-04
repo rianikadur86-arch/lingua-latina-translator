@@ -4,19 +4,14 @@ const fs = require('fs');
 const app = express();
 const PORT = 3000;
 
-// Mengaktifkan izin agar file index.html bisa memanggil server ini
 app.use(cors());
 
-// Fungsi utama untuk mencari kata
 app.get('/api/kamus', (req, res) => {
     try {
         const kataKunci = req.query.kata.toLowerCase().trim();
-        
-        // Membaca file data.json secara sinkron
         const dataMentah = fs.readFileSync('data.json', 'utf8');
         const kamus = JSON.parse(dataMentah);
 
-        // Mencari kecocokan di kolom latin atau indonesia
         const hasil = kamus.find(item => 
             item.latin.toLowerCase() === kataKunci || 
             item.indonesia.toLowerCase() === kataKunci
